@@ -189,9 +189,14 @@ def reset():
     return {"ok": True}
 
 
-app.mount("/static", StaticFiles(directory=os.path.join(HERE, "static")), name="static")
+STATIC_DIR = os.path.join(HERE, "static")
+INDEX = os.path.join(STATIC_DIR, "index.html")
+if not os.path.exists(INDEX):
+    INDEX = os.path.join(HERE, "index.html")
+if os.path.isdir(STATIC_DIR):
+    app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 
 @app.get("/")
 def index():
-    return FileResponse(os.path.join(HERE, "static", "index.html"))
+    return FileResponse(INDEX)
